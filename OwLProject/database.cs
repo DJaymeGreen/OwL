@@ -115,5 +115,81 @@ namespace OwLProject {
             }
             return true;
         }
+
+        /**
+         * Gets all of the unique lesson titles into an arraylist and returns
+         * */
+        public ArrayList getAllLessonTitles() {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT title FROM Lesson");
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                ArrayList allLessonTitles = new ArrayList();
+                while (dr.Read()) {
+                    allLessonTitles.Add(Convert.ToString(dr[0]));
+                }
+
+                return (allLessonTitles);
+            }
+        }
+
+        /**
+         * Gets all of the media associated with the given LID
+         * */
+        public ArrayList getAllMedia(int LID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT media FROM MediaLesson " +
+                    "WHERE LID = @lid");
+                cmd.Parameters.AddWithValue("@lid",LID);
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                ArrayList allMedia = new ArrayList();
+                while (dr.Read()) {
+                    allMedia.Add((byte[])dr[0]);
+                }
+
+                return (allMedia);
+            }
+        }
+
+        /**
+         * Gets the number of Lessons in the Lesson Table
+         * */
+        public int getAllLessonsCount() {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Lesson");
+
+                cmd.Connection = db;
+                Int32 count = (Int32)cmd.ExecuteScalar();
+
+                return (count);
+            }
+        }
+
+        /**
+         * Gets the number of Media in the Media Table
+         * */
+        public int getAllMediaCount() {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM MediaLesson");
+
+                cmd.Connection = db;
+                Int32 count = (Int32)cmd.ExecuteScalar();
+
+                return (count);
+            }
+        }
     }
 }

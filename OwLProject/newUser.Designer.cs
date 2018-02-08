@@ -88,6 +88,7 @@
             this.newUserConfirmPassword.Name = "newUserConfirmPassword";
             this.newUserConfirmPassword.Size = new System.Drawing.Size(153, 26);
             this.newUserConfirmPassword.TabIndex = 5;
+            this.newUserConfirmPassword.UseSystemPasswordChar = true;
             // 
             // newUserRegisterButton
             // 
