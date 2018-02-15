@@ -38,7 +38,12 @@ namespace OwLProject
                 byte[] passHash = hash.ComputeHash(Encoding.UTF8.GetBytes(logInPassword.Text));
                 String password = Convert.ToBase64String(passHash);
                 if (db.checkUserInDB(logInUsername.Text, password)) {
-                    MessageBox.Show("Yay, you're in!");
+                    //MessageBox.Show("Yay, you're in!");
+                    mainMenu mm = new mainMenu(this);
+                    mm.Show();
+                    this.Hide();
+                    logInUsername.Text = "";
+                    logInPassword.Text = "";
                 }
                 else {
                     MessageBox.Show("That Username/Password combination is not in the database!");

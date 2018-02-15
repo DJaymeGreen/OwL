@@ -191,5 +191,135 @@ namespace OwLProject {
                 return (count);
             }
         }
+
+        /**
+         * Checks if the lesson exists given the title
+         * */
+        public Boolean checkIfLessonTitleExists(String title) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Lesson " +
+                "WHERE title = @title");
+                cmd.Parameters.AddWithValue("@title", title);
+
+                cmd.Connection = db;
+                Int32 count = (Int32)cmd.ExecuteScalar();
+
+                return (count == 0);
+            }
+        }
+
+        /**
+         * Gets the LID from the given title in Lesson
+         * */
+        public int getLidFromTitle(String title) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT LID FROM Lesson " +
+                    "WHERE title = @title");
+                cmd.Parameters.AddWithValue("@title", title);
+
+                cmd.Connection = db;
+                Int32 LID = (Int32)cmd.ExecuteScalar();
+
+                return (LID);
+            }
+        }
+
+        /**
+         * Returns all of the Users in the database by Username
+         * */
+        public ArrayList getAllUsers() {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT username FROM allUsers");
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                ArrayList allUsernames = new ArrayList();
+                while (dr.Read()) {
+                    allUsernames.Add(Convert.ToString(dr[0]));
+                }
+
+                return (allUsernames);
+            }
+        }
+
+        /**
+         * Create a new Lesson with the given data
+         * */
+        public Boolean addLesson(int LID, String title, int prereq, int difficulty, Boolean markedTypo, int contentV, int contentA, int contentO, String content) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO Lesson " +
+                    "(LID,title,preReq,difficulty,markedTypo,userRating,contentV,contentA,contentO,content) VALUES " +
+                    "(@LID,@title,@preReq,@difficulty,@markedTypo,@userRating,@contentV,@contentA,@contentO,@content)");
+                cmd.Parameters.AddWithValue("@LID", LID);
+                cmd.Parameters.AddWithValue("@title", title);
+                cmd.Parameters.AddWithValue("@preReq", prereq);
+                cmd.Parameters.AddWithValue("@difficulty", difficulty);
+                cmd.Parameters.AddWithValue("@markedTypo", markedTypo);
+                cmd.Parameters.AddWithValue("@userRating", 5);
+                cmd.Parameters.AddWithValue("@contentV", contentV);
+                cmd.Parameters.AddWithValue("@contentA", contentA);
+                cmd.Parameters.AddWithValue("@contentO", contentO);
+                cmd.Parameters.AddWithValue("@content", content);
+
+                cmd.Connection = db;
+                int colsAffected = cmd.ExecuteNonQuery();
+                if (colsAffected == 0) {
+                    return false;
+                }
+                //return true;
+            }
+
+            // Give all Users the Lesson
+            foreach (String user in getAllUsers()) {
+                using (SqlConnection db = new SqlConnection(connectionString)) {
+                    db.Open();
+
+                    SqlCommand cmd = new SqlCommand("INSERT INTO UserLesson " +
+                        "(username,LID,isComplete) VALUES " +
+                        "(@username,@LID,@isComplete)");
+                    cmd.Parameters.AddWithValue("@username", user);
+                    cmd.Parameters.AddWithValue("@LID", LID);
+                    cmd.Parameters.AddWithValue("@isComplete", false);
+
+                    cmd.Connection = db;
+                    int colsAffected = cmd.ExecuteNonQuery();
+                }
+            }
+            return true;
+            //return true;
+
+        }
+
+
+
+        // Add the given Media to the MediaLesson db returning True if successful
+        public Boolean addMediaLesson(int LID, byte[] media, String title, String description) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO MediaLesson " +
+                    "(MID,LID,media,title,description) VALUES " +
+                    "(@MID,@LID,@media,@title,@description)");
+                cmd.Parameters.AddWithValue("@MID", getAllMediaCount()+1);
+                cmd.Parameters.AddWithValue("@LID", LID);
+                cmd.Parameters.AddWithValue("@media", media);
+                cmd.Parameters.AddWithValue("@title", title);
+                cmd.Parameters.AddWithValue("@description", description);
+
+                cmd.Connection = db;
+                int colsAffected = cmd.ExecuteNonQuery();
+            }
+        
+            return true;
+        }
     }
 }
