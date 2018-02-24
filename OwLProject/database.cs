@@ -206,7 +206,7 @@ namespace OwLProject {
                 cmd.Connection = db;
                 Int32 count = (Int32)cmd.ExecuteScalar();
 
-                return (count == 0);
+                return (count != 0);
             }
         }
 
@@ -255,13 +255,18 @@ namespace OwLProject {
         public Boolean addLesson(int LID, String title, int prereq, int difficulty, Boolean markedTypo, int contentV, int contentA, int contentO, String content) {
             using (SqlConnection db = new SqlConnection(connectionString)) {
                 db.Open();
-
+                //int? hadPrereq = (prereq == 0) ? null : prereq;
                 SqlCommand cmd = new SqlCommand("INSERT INTO Lesson " +
                     "(LID,title,preReq,difficulty,markedTypo,userRating,contentV,contentA,contentO,content) VALUES " +
                     "(@LID,@title,@preReq,@difficulty,@markedTypo,@userRating,@contentV,@contentA,@contentO,@content)");
                 cmd.Parameters.AddWithValue("@LID", LID);
                 cmd.Parameters.AddWithValue("@title", title);
-                cmd.Parameters.AddWithValue("@preReq", prereq);
+                if (prereq == 0) {
+                    cmd.Parameters.AddWithValue("@preReq", DBNull.Value);
+                }
+                else {
+                    cmd.Parameters.AddWithValue("@preReq", prereq);
+                }
                 cmd.Parameters.AddWithValue("@difficulty", difficulty);
                 cmd.Parameters.AddWithValue("@markedTypo", markedTypo);
                 cmd.Parameters.AddWithValue("@userRating", 5);

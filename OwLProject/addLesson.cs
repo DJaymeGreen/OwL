@@ -55,6 +55,9 @@ namespace OwLProject {
         public addLesson() {
             InitializeComponent();
             db = new database();
+            foreach (String title in db.getAllLessonTitles()) {
+                addLessonPrereq.Items.Add(title);
+            }
             //fullImageDescript = new Dictionary<byte[], string>();
             mediaInLesson = new List<mediaStruct>();
             //imageTitlesInLesson = new List<mediaStruct>();
@@ -149,6 +152,16 @@ namespace OwLProject {
                 MessageBox.Show("The Audio Rating must be between 0 and 5!");
             }
             else {
+                if (addLessonMedia.Image != null) {
+                    mediaStruct oldMedia = new mediaStruct();
+                    oldMedia.Description = addLessonMediaDescription.Text;
+                    oldMedia.Media = mediaInLesson[currentShownImageIndex].Media;
+                    oldMedia.Title = addLessonMediaTitle.Text;
+                    mediaInLesson.RemoveAt(currentShownImageIndex);
+                    mediaInLesson.Insert(currentShownImageIndex, oldMedia);
+                    currentShownImageIndex = mediaInLesson.Count - 1;
+                }
+
                 int newLID = db.getAllLessonsCount() + 1;
                 String title = addLessonLessonTitle.Text;
                 int prereq = ((addLessonPrereq.Text.Length == 0) ? 0 : db.getLidFromTitle(addLessonPrereq.Text));
@@ -160,11 +173,15 @@ namespace OwLProject {
                 String content = addLessonContent.Text;
 
                 // DO DB CALL TO CREATE!!!!
+                db.addLesson(newLID, title, prereq, difficulty, markedTypo, contentV, contentA, contentO, content);
 
                 // DO DB CALL TO CREATE MEDIA-LESSON!!!!
                 foreach(mediaStruct image in mediaInLesson) {
                     //DB call to add to Lesson
+                    db.addMediaLesson(newLID, image.Media, image.Title, image.Description);
                 }
+
+                MessageBox.Show("Successfully added a lesson! Press New Lesson to erase fields");
             }
         }
 
