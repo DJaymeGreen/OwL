@@ -304,7 +304,51 @@ namespace OwLProject {
 
         }
 
+        /**
+         * Grabs the Content of the given Lesson
+         * */
+        public String getLessonContent(int LID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
 
+                SqlCommand cmd = new SqlCommand("SELECT content FROM Lesson " +
+                    "WHERE LID = @LID");
+                cmd.Parameters.AddWithValue("@LID", LID);
+
+                cmd.Connection = db;
+                String content = (String)cmd.ExecuteScalar();
+
+                return (content);
+            }
+        }
+
+        /**
+         * Gets all of the media for a given LID
+         * */
+        public List<mediaStruct> getAllMediaForLesson(int LID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT media,title,description FROM MediaLesson " +
+                    "WHERE LID = @LID");
+                cmd.Parameters.AddWithValue("@LID",LID);
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                List<mediaStruct> allMedia = new List<mediaStruct>();
+                while (dr.Read()) {
+                    mediaStruct image = new mediaStruct();
+                    image.Media = (byte[])dr[0];
+                    image.Title = (Convert.ToString(dr[1]));
+                    image.Description = (Convert.ToString(dr[1]));
+                    //allMedia.Add(Convert.ToString(dr[0]));
+                    allMedia.Add(image);
+                }
+
+                return (allMedia);
+            }
+        }
 
         // Add the given Media to the MediaLesson db returning True if successful
         public Boolean addMediaLesson(int LID, byte[] media, String title, String description) {
@@ -324,6 +368,126 @@ namespace OwLProject {
                 int colsAffected = cmd.ExecuteNonQuery();
             }
         
+            return true;
+        }
+
+        /**
+         * Gets the number of all of the Problem
+         * */
+        public int getProblemCount() {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Problem");
+
+                cmd.Connection = db;
+                Int32 count = (Int32)cmd.ExecuteScalar();
+
+                return (count);
+            }
+        }
+
+        /**
+         * Gets the total number of Choices 
+         * */
+        public int getChoiceCount() {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Choice");
+
+                cmd.Connection = db;
+                Int32 count = (Int32)cmd.ExecuteScalar();
+
+                return (count);
+            }
+        }
+
+        /**
+         * Add the given problem to the database
+         * */
+        public bool addProblemToDB(int PID, int type, int difficulty, String question, String title) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO Problem " +
+                    "(PID,type,difficulty,question,title,markedBug,userRating,userDifficulty) VALUES " +
+                    "(@PID,@type,@difficulty,@question,@title,@markedBug,@userRating,@userDifficulty)");
+                cmd.Parameters.AddWithValue("@PID", PID);
+                cmd.Parameters.AddWithValue("@type", type);
+                cmd.Parameters.AddWithValue("@difficulty", difficulty);
+                cmd.Parameters.AddWithValue("@question", question);
+                cmd.Parameters.AddWithValue("@title", title);
+                cmd.Parameters.AddWithValue("@markedBug", false);
+                cmd.Parameters.AddWithValue("@userRating", 5);
+                cmd.Parameters.AddWithValue("@userDifficulty", 0);
+
+                cmd.Connection = db;
+                int colsAffected = cmd.ExecuteNonQuery();
+            }
+
+            return true;
+        }
+
+        /**
+         * Adds the given Choice to the database
+         * */
+        public bool addChoice(int CID, String content, Boolean isSolution, String feedback) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO Choice " +
+                    "(CID,content,isSolution,feedback) VALUES " +
+                    "(@CID,@content,@isSolution,@feedback)");
+                cmd.Parameters.AddWithValue("@CID", CID);
+                cmd.Parameters.AddWithValue("@content", content);
+                cmd.Parameters.AddWithValue("@isSolution", isSolution);
+                cmd.Parameters.AddWithValue("@feedback", feedback);
+
+                cmd.Connection = db;
+                int colsAffected = cmd.ExecuteNonQuery();
+            }
+
+            return true;
+        }
+
+        /**
+         * Adds the given PID and CID to the ProblemChoice table
+         * */
+        public bool connectProblemChoice(int PID, int CID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO ProblemChoice " +
+                    "(PID,CID) VALUES " +
+                    "(@PID,@CID)");
+                cmd.Parameters.AddWithValue("@PID", PID);
+                cmd.Parameters.AddWithValue("@CID", CID);
+
+                cmd.Connection = db;
+                int colsAffected = cmd.ExecuteNonQuery();
+            }
+
+            return true;
+        }
+
+        /**
+         * Connect the Lesson and Problem together
+         * */
+        public bool connectLessonProblem(int LID, int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO LessonProblem " +
+                    "(LID,PID) VALUES " +
+                    "(@LID,@PID)");
+                cmd.Parameters.AddWithValue("@LID", LID);
+                cmd.Parameters.AddWithValue("@PID", PID);
+
+                cmd.Connection = db;
+                int colsAffected = cmd.ExecuteNonQuery();
+            }
+
             return true;
         }
     }

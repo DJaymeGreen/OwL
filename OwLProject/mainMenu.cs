@@ -29,5 +29,19 @@ namespace OwLProject {
         private void formClose(object sender, FormClosedEventArgs e) {
             login.Show();
         }
+
+        /**
+         * Opens up whatLesson page
+         * */
+        private void button2_Click(object sender, EventArgs e) {
+            whatLesson whatLess = new whatLesson();
+            whatLess.Show();
+        }
+
+        // Opens Add Problem Page
+        private void mainMenuAddProblem_Click(object sender, EventArgs e) {
+            addProblem aP = new addProblem();
+            aP.Show();
+        }
     }
 }

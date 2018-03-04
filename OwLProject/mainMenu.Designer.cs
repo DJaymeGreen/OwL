@@ -25,6 +25,7 @@
         private void InitializeComponent() {
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.mainMenuAddProblem = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -49,12 +50,26 @@
             this.button2.TabIndex = 1;
             this.button2.Text = "View Lesson";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // mainMenuAddProblem
+            // 
+            this.mainMenuAddProblem.AutoSize = true;
+            this.mainMenuAddProblem.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mainMenuAddProblem.Location = new System.Drawing.Point(83, 206);
+            this.mainMenuAddProblem.Name = "mainMenuAddProblem";
+            this.mainMenuAddProblem.Size = new System.Drawing.Size(110, 30);
+            this.mainMenuAddProblem.TabIndex = 2;
+            this.mainMenuAddProblem.Text = "Add Problem";
+            this.mainMenuAddProblem.UseVisualStyleBackColor = true;
+            this.mainMenuAddProblem.Click += new System.EventHandler(this.mainMenuAddProblem_Click);
             // 
             // mainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(639, 516);
+            this.Controls.Add(this.mainMenuAddProblem);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "mainMenu";
@@ -69,5 +84,6 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button mainMenuAddProblem;
     }
 }

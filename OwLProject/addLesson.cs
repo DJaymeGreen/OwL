@@ -22,7 +22,7 @@ namespace OwLProject {
          * A Structure that holds all of the Media information. Associates
          * a piece of media with a title and description
          * */
-        private struct mediaStruct {
+        /*private struct mediaStruct {
             private String mediaTitle;
             private String mediaDescription;
             private byte[] media;
@@ -51,7 +51,7 @@ namespace OwLProject {
                 }
             }
         }
-
+        */
         public addLesson() {
             InitializeComponent();
             db = new database();
