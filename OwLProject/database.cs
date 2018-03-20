@@ -490,5 +490,323 @@ namespace OwLProject {
 
             return true;
         }
+
+        /**
+         * Get all of the PID that are associated with the LID
+         * */
+        public List<int> getAllProblemPID(int LID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT PID FROM LessonProblem " +
+                    "WHERE LID = @LID");
+                cmd.Parameters.AddWithValue("@LID", LID);
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+                List<int> allPID = new List<int>();
+                if (dr.HasRows) {
+                    while (dr.Read()) {
+                        allPID.Add((int)dr[0]);
+                    }
+                }
+                return (allPID);
+            }
+        }
+
+        /**
+         * Gets all of the CID associated with the PID
+         * */
+        public List<int> getAllChoicesCID(int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT CID FROM ProblemChoice " +
+                    "WHERE PID = @PID");
+                cmd.Parameters.AddWithValue("@PID", PID);
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+                List<int> allCID = new List<int>();
+                if (dr.HasRows) {
+                    while (dr.Read()) {
+                        allCID.Add((int)dr[0]);
+                    }
+                }
+                return (allCID);
+            }
+        }
+
+        /**
+         * Gets the type for the given Problem
+         * */
+        public int getProblemType(int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT type FROM Problem " +
+                    "WHERE PID = @PID");
+                cmd.Parameters.AddWithValue("@PID", PID);
+
+                cmd.Connection = db;
+                int type = (int)cmd.ExecuteScalar();
+
+                return (type);
+            }
+        }
+
+
+        /**
+         * Gets the difficulty for the given Problem
+         * */
+        public int getProblemDifficulty(int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT difficulty FROM Problem " +
+                    "WHERE PID = @PID");
+                cmd.Parameters.AddWithValue("@PID", PID);
+
+                cmd.Connection = db;
+                int difficulty = (int)cmd.ExecuteScalar();
+
+                return (difficulty);
+            }
+        }
+
+        /**
+         * Gets the question for the given Problem
+         * */
+        public String getProblemQuestion(int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT question FROM Problem " +
+                    "WHERE PID = @PID");
+                cmd.Parameters.AddWithValue("@PID", PID);
+
+                cmd.Connection = db;
+                String question = (String)cmd.ExecuteScalar();
+
+                return (question);
+            }
+        }
+
+        /**
+         * Gets the title for the given Problem
+         * */
+        public String getProblemTitle(int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT title FROM Problem " +
+                    "WHERE PID = @PID");
+                cmd.Parameters.AddWithValue("@PID", PID);
+
+                cmd.Connection = db;
+                String title = (String)cmd.ExecuteScalar();
+
+                return (title);
+            }
+        }
+
+        /**
+         * Gets the content for the given Choice
+         * */
+        public String getChoiceContent(int CID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT content FROM Choice " +
+                    "WHERE CID = @CID");
+                cmd.Parameters.AddWithValue("@CID", CID);
+
+                cmd.Connection = db;
+                String content = (String)cmd.ExecuteScalar();
+
+                return (content);
+            }
+        }
+
+        /**
+         * Gets the isSolution for the given Choice
+         * */
+        public bool getChoiceisSolution(int CID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT isSolution FROM Choice " +
+                    "WHERE CID = @CID");
+                cmd.Parameters.AddWithValue("@CID", CID);
+
+                cmd.Connection = db;
+                bool isSolution = (bool)cmd.ExecuteScalar();
+
+                return (isSolution);
+            }
+        }
+
+        /**
+         * Gets the feedback for the given Choice
+         * */
+        public String getChoiceFeedback(int CID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT feedback FROM Choice " +
+                    "WHERE CID = @CID");
+                cmd.Parameters.AddWithValue("@CID", CID);
+
+                cmd.Connection = db;
+                String isSolution = (String)cmd.ExecuteScalar();
+
+                return (isSolution);
+            }
+        }
+
+        /**
+         * Get the number of items in the History table.
+         * Mostly to determine the next HID to make
+         * */
+        public int getHistoryCount() {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM History");
+
+                cmd.Connection = db;
+                Int32 count = (Int32)cmd.ExecuteScalar();
+
+                return (count);
+            }
+        }
+
+        /**
+         * Add the given information to the History table
+         * */
+        public Boolean addToHistory(int HID, String input, int PID, int LID, Boolean isCorrect, int userRating) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO History " +
+                    "(HID,input,PID,LID,isCorrect,userRating) VALUES " +
+                    "(@HID,@input,@PID,@LID,@isCorrect,@userRating)");
+                cmd.Parameters.AddWithValue("@HID", HID);
+                cmd.Parameters.AddWithValue("@input", input);
+                cmd.Parameters.AddWithValue("@PID", PID);
+                cmd.Parameters.AddWithValue("@LID", LID);
+                cmd.Parameters.AddWithValue("@isCorrect", isCorrect);
+                cmd.Parameters.AddWithValue("@userRating", userRating);
+
+                cmd.Connection = db;
+                int colsAffected = cmd.ExecuteNonQuery();
+            }
+
+            return true;
+        }
+
+        /**
+         * Connect a username and a HID together. This should be done for every
+         * addition to the History table.
+         * */
+        public Boolean addToUserHistory(int HID,String username) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO UserHistory " +
+                    "(HID,username) VALUES " +
+                    "(@HID,@username)");
+                cmd.Parameters.AddWithValue("@HID", HID);
+                cmd.Parameters.AddWithValue("@username", username);
+
+                cmd.Connection = db;
+                int colsAffected = cmd.ExecuteNonQuery();
+            }
+
+            return true;
+        }
+
+        /**
+         * Look at the History table for the given user and lesson and get the number
+         * of correct problems that the user has done
+         * */
+        public int getNumberofQuestionsCorrectForLesson(int LID, String username) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                //Need a table join...
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM " + 
+                    "History AS h, UserHistory as uh, User as u " +
+                    "WHERE h.HID = uh.HID AND " +
+                    "uh.username = @username AND " +
+                    "h.LID = @LID AND " +
+                    "h.isCorrect = @true");
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@LID", LID);
+                cmd.Parameters.AddWithValue("@true", true);
+
+                cmd.Connection = db;
+                Int32 count = (Int32)cmd.ExecuteScalar();
+
+                return (count);
+            }
+        }
+
+        /**
+         * Gets the content associated with the Solution of the problem.
+         * */
+        public List<String> getSolutionContent(int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                //Need a table join...
+                SqlCommand cmd = new SqlCommand("SELECT C.content FROM " +
+                    "Choice AS c, ProblemChoice as pc, Problem as p " +
+                    "WHERE @PID = pc.PID AND " +
+                    "pc.CID = c.CID AND " +
+                    "c.isSolution = @true");
+                cmd.Parameters.AddWithValue("@PID", PID);
+                cmd.Parameters.AddWithValue("@true", true);
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+                List<String> solutionContent = new List<String>();
+                if (dr.HasRows) {
+                    while (dr.Read()) {
+                        solutionContent.Add((String)dr[0]);
+                    }
+                }
+                return (solutionContent);
+            }
+        }
+
+        /**
+         * Gets the CID given the PID and content. Should only return a single int
+         * of either the CID or -1 (if no CID associated with it)
+         * */
+        public int getCIDFromContent(int PID, String content) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                //Need a table join...
+                SqlCommand cmd = new SqlCommand("SELECT C.CID FROM " +
+                    "Choice AS c, ProblemChoice as pc " +
+                    "WHERE @PID = pc.PID AND " +
+                    "pc.CID = c.CID AND " +
+                    "c.content = @content");
+                cmd.Parameters.AddWithValue("@PID", PID);
+                cmd.Parameters.AddWithValue("@content", content);
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+                int solutionContent = -1;
+                if (dr.HasRows) {
+                    while (dr.Read()) {
+                        solutionContent = ((int)dr[0]);
+                    }
+                }
+                return (solutionContent);
+            }
+        }
     }
 }

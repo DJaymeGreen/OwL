@@ -71,6 +71,7 @@
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.addProblemChartGivenLabel = new System.Windows.Forms.Label();
             this.addProblemChartAnswer = new System.Windows.Forms.DataGridView();
+            this.addProblemChartAnswerLabel = new System.Windows.Forms.Label();
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -79,9 +80,6 @@
             this.Column14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column17 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column18 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.addProblemChartAnswerLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.addProblemDifficulty)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.addProblemChartGiven)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.addProblemChartAnswer)).BeginInit();
@@ -538,14 +536,23 @@
             this.Column13,
             this.Column14,
             this.Column15,
-            this.Column16,
-            this.Column17,
-            this.Column18});
+            this.Column16});
             this.addProblemChartAnswer.Location = new System.Drawing.Point(396, 368);
             this.addProblemChartAnswer.Name = "addProblemChartAnswer";
             this.addProblemChartAnswer.Size = new System.Drawing.Size(742, 173);
             this.addProblemChartAnswer.TabIndex = 39;
             this.addProblemChartAnswer.Visible = false;
+            // 
+            // addProblemChartAnswerLabel
+            // 
+            this.addProblemChartAnswerLabel.AutoSize = true;
+            this.addProblemChartAnswerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addProblemChartAnswerLabel.Location = new System.Drawing.Point(392, 336);
+            this.addProblemChartAnswerLabel.Name = "addProblemChartAnswerLabel";
+            this.addProblemChartAnswerLabel.Size = new System.Drawing.Size(66, 20);
+            this.addProblemChartAnswerLabel.TabIndex = 40;
+            this.addProblemChartAnswerLabel.Text = "Answer:";
+            this.addProblemChartAnswerLabel.Visible = false;
             // 
             // Column9
             // 
@@ -586,27 +593,6 @@
             // 
             this.Column16.HeaderText = "Column16";
             this.Column16.Name = "Column16";
-            // 
-            // Column17
-            // 
-            this.Column17.HeaderText = "Column17";
-            this.Column17.Name = "Column17";
-            // 
-            // Column18
-            // 
-            this.Column18.HeaderText = "Column18";
-            this.Column18.Name = "Column18";
-            // 
-            // addProblemChartAnswerLabel
-            // 
-            this.addProblemChartAnswerLabel.AutoSize = true;
-            this.addProblemChartAnswerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addProblemChartAnswerLabel.Location = new System.Drawing.Point(392, 336);
-            this.addProblemChartAnswerLabel.Name = "addProblemChartAnswerLabel";
-            this.addProblemChartAnswerLabel.Size = new System.Drawing.Size(66, 20);
-            this.addProblemChartAnswerLabel.TabIndex = 40;
-            this.addProblemChartAnswerLabel.Text = "Answer:";
-            this.addProblemChartAnswerLabel.Visible = false;
             // 
             // addProblem
             // 
@@ -714,6 +700,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
         private System.Windows.Forms.Label addProblemChartGivenLabel;
         private System.Windows.Forms.DataGridView addProblemChartAnswer;
+        private System.Windows.Forms.Label addProblemChartAnswerLabel;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column11;
@@ -722,8 +709,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column14;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column15;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column16;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column17;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column18;
-        private System.Windows.Forms.Label addProblemChartAnswerLabel;
     }
 }

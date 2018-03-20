@@ -260,7 +260,7 @@ namespace OwLProject {
 
             foreach(DataGridViewRow row in addProblemChartGiven.Rows) {
                 for(int i = 0; i < row.Cells.Count; ++i) {
-                    given += (row.Cells[i].Value + "," ?? "NULL,").ToString();
+                    given += (row.Cells[i].Value + ",").ToString();
                 }
             }
 
@@ -269,7 +269,7 @@ namespace OwLProject {
 
             foreach (DataGridViewRow row in addProblemChartAnswer.Rows) {
                 for (int i = 0; i < row.Cells.Count; ++i) {
-                    answer += (row.Cells[i].Value + "," ?? "NULL,").ToString();
+                    answer += (row.Cells[i].Value + ",").ToString();
                 }
             }
 
@@ -297,6 +297,8 @@ namespace OwLProject {
                 CID = db.getChoiceCount()+1;
                 db.addChoice(CID, choice.Choice, choice.Correct, choice.Feedback);
                 db.connectProblemChoice(newPID, CID);
+
+                //MessageBox.Show("Is it equal: " + choice.Choice.Equals(db.getChoiceContent(CID)));
             }
             MessageBox.Show("Successfully added question!");
             this.Close();
