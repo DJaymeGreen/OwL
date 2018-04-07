@@ -59,8 +59,11 @@
             this.viewLessonFeedbackLabel = new System.Windows.Forms.Label();
             this.viewLessonFeedback = new System.Windows.Forms.Label();
             this.viewLessonSkipQuestionButton = new System.Windows.Forms.Button();
+            this.viewLessonYourRatingLabel = new System.Windows.Forms.Label();
+            this.viewLessonYourRating = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.viewLessonMedia)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewLessonChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.viewLessonYourRating)).BeginInit();
             this.SuspendLayout();
             // 
             // viewLessonTitleLabel
@@ -75,6 +78,7 @@
             // 
             // viewLessonContent
             // 
+            this.viewLessonContent.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.viewLessonContent.Location = new System.Drawing.Point(28, 47);
             this.viewLessonContent.MinimumSize = new System.Drawing.Size(300, 581);
             this.viewLessonContent.Multiline = true;
@@ -96,21 +100,21 @@
             // 
             // viewLessonMedia
             // 
-            this.viewLessonMedia.Location = new System.Drawing.Point(373, 148);
+            this.viewLessonMedia.Location = new System.Drawing.Point(349, 121);
             this.viewLessonMedia.Name = "viewLessonMedia";
-            this.viewLessonMedia.Size = new System.Drawing.Size(186, 172);
+            this.viewLessonMedia.Size = new System.Drawing.Size(261, 223);
             this.viewLessonMedia.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.viewLessonMedia.TabIndex = 3;
             this.viewLessonMedia.TabStop = false;
             // 
             // viewLessonMediaDescription
             // 
-            this.viewLessonMediaDescription.Location = new System.Drawing.Point(373, 363);
+            this.viewLessonMediaDescription.Location = new System.Drawing.Point(349, 363);
             this.viewLessonMediaDescription.Multiline = true;
             this.viewLessonMediaDescription.Name = "viewLessonMediaDescription";
             this.viewLessonMediaDescription.ReadOnly = true;
             this.viewLessonMediaDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.viewLessonMediaDescription.Size = new System.Drawing.Size(186, 102);
+            this.viewLessonMediaDescription.Size = new System.Drawing.Size(261, 107);
             this.viewLessonMediaDescription.TabIndex = 4;
             // 
             // viewLessonNextMedia
@@ -160,7 +164,7 @@
             // 
             this.button1.AutoSize = true;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(833, 598);
+            this.button1.Location = new System.Drawing.Point(911, 598);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 30);
             this.button1.TabIndex = 9;
@@ -376,6 +380,7 @@
             this.viewLessonChartResetToGivenButton.Text = "Reset To Given";
             this.viewLessonChartResetToGivenButton.UseVisualStyleBackColor = true;
             this.viewLessonChartResetToGivenButton.Visible = false;
+            this.viewLessonChartResetToGivenButton.Click += new System.EventHandler(this.viewLessonChartResetToGivenButton_Click);
             // 
             // viewLessonDropdown
             // 
@@ -419,11 +424,36 @@
             this.viewLessonSkipQuestionButton.UseVisualStyleBackColor = true;
             this.viewLessonSkipQuestionButton.Click += new System.EventHandler(this.viewLessonSkipQuestionButton_Click);
             // 
+            // viewLessonYourRatingLabel
+            // 
+            this.viewLessonYourRatingLabel.AutoSize = true;
+            this.viewLessonYourRatingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.viewLessonYourRatingLabel.Location = new System.Drawing.Point(645, 570);
+            this.viewLessonYourRatingLabel.Name = "viewLessonYourRatingLabel";
+            this.viewLessonYourRatingLabel.Size = new System.Drawing.Size(98, 20);
+            this.viewLessonYourRatingLabel.TabIndex = 28;
+            this.viewLessonYourRatingLabel.Text = "Your Rating:";
+            // 
+            // viewLessonYourRating
+            // 
+            this.viewLessonYourRating.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.viewLessonYourRating.Location = new System.Drawing.Point(649, 601);
+            this.viewLessonYourRating.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.viewLessonYourRating.Name = "viewLessonYourRating";
+            this.viewLessonYourRating.Size = new System.Drawing.Size(120, 26);
+            this.viewLessonYourRating.TabIndex = 29;
+            // 
             // viewLesson
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1270, 640);
+            this.Controls.Add(this.viewLessonYourRating);
+            this.Controls.Add(this.viewLessonYourRatingLabel);
             this.Controls.Add(this.viewLessonSkipQuestionButton);
             this.Controls.Add(this.viewLessonFeedback);
             this.Controls.Add(this.viewLessonFeedbackLabel);
@@ -456,6 +486,7 @@
             this.Text = "viewLesson";
             ((System.ComponentModel.ISupportInitialize)(this.viewLessonMedia)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewLessonChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.viewLessonYourRating)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -499,5 +530,7 @@
         private System.Windows.Forms.Label viewLessonFeedbackLabel;
         private System.Windows.Forms.Label viewLessonFeedback;
         private System.Windows.Forms.Button viewLessonSkipQuestionButton;
+        private System.Windows.Forms.Label viewLessonYourRatingLabel;
+        private System.Windows.Forms.NumericUpDown viewLessonYourRating;
     }
 }

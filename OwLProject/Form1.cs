@@ -39,8 +39,15 @@ namespace OwLProject
                 String password = Convert.ToBase64String(passHash);
                 if (db.checkUserInDB(logInUsername.Text, password)) {
                     //MessageBox.Show("Yay, you're in!");
-                    mainMenu mm = new mainMenu(this);
-                    mm.Show();
+                    if (db.isUserAdmin(logInUsername.Text)) {
+                        mainMenu mm = new mainMenu(this,logInUsername.Text.ToString());
+                        mm.Show();
+                    }
+                    else {
+                        mainMenuUser umm = new mainMenuUser(this, logInUsername.Text.ToString());
+                        umm.Show();
+                    }
+                    
                     this.Hide();
                     logInUsername.Text = "";
                     logInPassword.Text = "";

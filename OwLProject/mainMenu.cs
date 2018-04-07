@@ -12,10 +12,12 @@ namespace OwLProject {
     public partial class mainMenu : Form {
 
         Form login;
+        String username;
 
-        public mainMenu(Form logIn) {
+        public mainMenu(Form logIn, String username) {
             InitializeComponent();
             this.login = logIn;
+            this.username = username;
         }
 
         private void button1_Click(object sender, EventArgs e) {
@@ -34,7 +36,7 @@ namespace OwLProject {
          * Opens up whatLesson page
          * */
         private void button2_Click(object sender, EventArgs e) {
-            whatLesson whatLess = new whatLesson();
+            whatLesson whatLess = new whatLesson(username);
             whatLess.Show();
         }
 

@@ -20,10 +20,13 @@ namespace OwLProject {
         int currentShownProblemIndex;
         int currentShownImageIndex;
         database db;
+        String username;
+        mainMenuUser userMM = null;
 
-        public viewLesson(String lessonTitle) {
+        public viewLesson(String lessonTitle, String username) {
             db = new database();
             InitializeComponent();
+            this.username = username;
             int LID = db.getLidFromTitle(lessonTitle);
             allPID = db.getAllProblemPID(LID);
             //Generate all of the right shown stuff
@@ -90,10 +93,17 @@ namespace OwLProject {
         }
 
         /**
+         * Gives the viewLesson the mmUser form
+         * */
+        public void getUserForm(mainMenuUser mmUser) {
+            userMM = mmUser;
+        }
+
+        /**
          * Does the creation of the MC Struct (with CID, Label, and CB) and returns it
          * */
         private List<mcViewStruct> setUpMC() {
-            List<int> CID = db.getAllChoicesCID(allPID[currentShownImageIndex]);
+            List<int> CID = db.getAllChoicesCID(allPID[currentShownProblemIndex]);
             List<mcViewStruct> mcChoices = new List<mcViewStruct>();
             List<CheckBox> allCheckBoxes = new List<CheckBox>();
             allCheckBoxes.Add(viewLessonMCCB1);
@@ -221,7 +231,7 @@ namespace OwLProject {
 
                 //Add all choices to the Dropdown...
                 viewLessonDropdown.Items.Clear();
-                List<int> allCIDForProblem = db.getAllChoicesCID(allPID[currentShownImageIndex]);
+                List<int> allCIDForProblem = db.getAllChoicesCID(allPID[currentShownProblemIndex]);
                 foreach (int CID in allCIDForProblem) {
                     viewLessonDropdown.Items.Add(db.getChoiceContent(CID));
                 }
@@ -275,6 +285,37 @@ namespace OwLProject {
          * */
         private void viewLessonSkipQuestionButton_Click(object sender, EventArgs e) {
             showNextProblem();
+        }
+
+        /**
+         * Gets the User's Answer's Content
+         * */
+        private List<String> getUsersContent() {
+            List<String> content = new List<String>();
+            int type = db.getProblemType(allPID[currentShownProblemIndex]);
+            //MC
+            if (type == 1) {
+                foreach(mcViewStruct mc in setUpMC()) {
+                    if(mc.CID != -1 && mc.CheckboxTF.Checked) {
+                        content.Add(mc.Content.ToString());
+                    }
+                }
+            }
+            //Chart
+            else if (type == 2) {
+                String given = "";
+                foreach (DataGridViewRow row in viewLessonChart.Rows) {
+                    for (int i = 0; i < row.Cells.Count; ++i) {
+                        given += (row.Cells[i].Value + ",").ToString();
+                    }
+                }
+                content.Add(given);
+            }
+            //Dropdown
+            else {
+                content.Add(viewLessonDropdown.Text);
+            }
+            return content;
         }
 
         /**
@@ -377,18 +418,55 @@ namespace OwLProject {
          * */
         private void button1_Click(object sender, EventArgs e) { 
             //Is Correct?
-            Boolean isCorrect = isUserCorrect();
-            if (isCorrect) {
-                MessageBox.Show("The question was correct!!");
-                showNextProblem();
+            if(viewLessonYourRating.Value > 5 || viewLessonYourRating.Value < 0) {
+                MessageBox.Show("Please have the user rating between 0 and 5");
             }
             else {
-                MessageBox.Show("Incorrect!");
+                Boolean isCorrect = isUserCorrect();
+                if (isCorrect) {
+                    MessageBox.Show("The question was correct!!");
+                    //showNextProblem();
+                }
+                else {
+                    MessageBox.Show("Incorrect!");
+                }
+                //Add to history
+            
+                List<String> userAnswer = getUsersContent();
+                int userRating = (int)viewLessonYourRating.Value;
+                foreach(String answer in userAnswer) {
+                    int newHID = db.getHistoryCount();
+                    db.addToUserHistory(newHID, username);
+                    db.addToHistory(newHID, answer, allPID[currentShownProblemIndex], db.getLIDFromPID(allPID[currentShownProblemIndex]), isCorrect, userRating);
+                }
+                if (isCorrect) {
+                    db.updateProblemUserRating(allPID[currentShownProblemIndex]);
+                }
+                //If correct, check if done with lesson or go to next problem
+                if (db.getNumberofQuestionsCorrectForLesson(db.getLIDFromPID(allPID[currentShownProblemIndex]),username) > 5) {
+                    db.updateUserCompleteLesson(db.getLIDFromPID(allPID[currentShownProblemIndex]), username);
+                    MessageBox.Show("Congratulations! You finished this lesson. You may advance to other lessons.");
+                    if(userMM != null) {
+                        userMM.updateDropDown();
+                    }
+                    this.Close();
+                }
+                else {
+                    //currentShownProblemIndex = -1;
+                    showNextProblem();
+                }
             }
-            //Add to history
-            int newHID = db.getHistoryCount();
-            //db.addToHistory(newHID,)
-            //If correct, check if done with lesson or go to next problem
+            
+        }
+
+
+        /**
+         * Reset the chart to the given state
+         * UNABLE TO TEST!!
+         * */
+        private void viewLessonChartResetToGivenButton_Click(object sender, EventArgs e) {
+            List<int> allCIDForProblem = db.getAllChoicesCID(allPID[currentShownProblemIndex]);
+            showChartGiven(allCIDForProblem);
         }
     }
 }

@@ -12,10 +12,12 @@ namespace OwLProject {
     public partial class whatLesson : Form {
 
         database db;
+        String username;
 
-        public whatLesson() {
+        public whatLesson(String username) {
             InitializeComponent();
             db = new database();
+            this.username = username;
             //Add all the titles to the Dropdown
             foreach (String title in db.getAllLessonTitles()) {
                 whatLessonDropdown.Items.Add(title);
@@ -32,7 +34,7 @@ namespace OwLProject {
             }
             else {
                 //Launch View Lesson Page...
-                viewLesson viewLess = new viewLesson(whatLessonDropdown.Text);
+                viewLesson viewLess = new viewLesson(whatLessonDropdown.Text,username);
                 viewLess.Show();
             }
         }

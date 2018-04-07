@@ -81,8 +81,8 @@ namespace OwLProject {
                 db.Open();
 
                 SqlCommand cmd = new SqlCommand("INSERT INTO allUsers " +
-                    "(username,password,email,joinDate,LTOther,LTVisual,LTAudio) VALUES " +
-                    "(@username,@password,@email,@joinDate,@LTOther,@LTVisual,@LTAudio)");
+                    "(username,password,email,joinDate,LTOther,LTVisual,LTAudio,isAdmin) VALUES " +
+                    "(@username,@password,@email,@joinDate,@LTOther,@LTVisual,@LTAudio, @isAdmin)");
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.Parameters.AddWithValue("@password", password);
                 cmd.Parameters.AddWithValue("@email", email);
@@ -90,6 +90,7 @@ namespace OwLProject {
                 cmd.Parameters.AddWithValue("@LTOther", other);
                 cmd.Parameters.AddWithValue("@LTVisual", visual);
                 cmd.Parameters.AddWithValue("@LTAudio", audio);
+                cmd.Parameters.AddWithValue("@isAdmin", false);
 
                 cmd.Connection = db;
                 int colsAffected = cmd.ExecuteNonQuery();
@@ -302,6 +303,24 @@ namespace OwLProject {
             return true;
             //return true;
 
+        }
+
+        /**
+         * Gets the Lesson's Title with the given LID
+         * */
+        public String getLessonTitle(int LID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT title FROM Lesson " +
+                    "WHERE LID = @LID");
+                cmd.Parameters.AddWithValue("@LID", LID);
+
+                cmd.Connection = db;
+                String content = (String)cmd.ExecuteScalar();
+
+                return (content);
+            }
         }
 
         /**
@@ -735,7 +754,7 @@ namespace OwLProject {
                 db.Open();
 
                 //Need a table join...
-                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM " + 
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(DISTINCT h.PID) FROM " + 
                     "History AS h, UserHistory as uh, User as u " +
                     "WHERE h.HID = uh.HID AND " +
                     "uh.username = @username AND " +
@@ -806,6 +825,214 @@ namespace OwLProject {
                     }
                 }
                 return (solutionContent);
+            }
+        }
+
+        /**
+         * Given a PID, it returns the LID associated with it
+         * */
+        public int getLIDFromPID(int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT LID FROM LessonProblem " +
+                    "WHERE PID = @PID");
+                cmd.Parameters.AddWithValue("@PID", PID);
+
+                cmd.Connection = db;
+                Int32 LID = (Int32)cmd.ExecuteScalar();
+
+                return (LID);
+            }
+        }
+
+        /**
+         * Changes the User's Complete Lesson to True 
+         * */
+        public Boolean updateUserCompleteLesson(int LID, String username) {
+            using(SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("UPDATE UserLesson " +
+                    "SET isComplete = @true " +
+                    "WHERE username = @username AND " +
+                    "LID = @LID");
+                cmd.Parameters.AddWithValue("@true", true);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@LID", LID);
+
+                cmd.Connection = db;
+                int colsAffected = cmd.ExecuteNonQuery();
+            }
+            return true;
+        }
+
+        /**
+         * Returns if the user is an Admin or not
+         * */
+        public Boolean isUserAdmin(String username) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT isAdmin FROM allUsers " +
+                    "WHERE username = @username");
+                cmd.Parameters.AddWithValue("@username", username);
+
+                cmd.Connection = db;
+                bool isAdmin = (bool)cmd.ExecuteScalar();
+
+                return (isAdmin);
+            }
+        }
+
+        /**
+         * Gets all of the lessons of the user that are not complete
+         * */
+        public List<int> getAllNotCompleteLessons(String username) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT LID FROM UserLesson " +
+                    "WHERE username = @username AND " +
+                    "isComplete = @false");
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@false", false);
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+                List<int> allLID = new List<int>();
+                if (dr.HasRows) {
+                    while (dr.Read()) {
+                        allLID.Add((int)dr[0]);
+                    }
+                }
+                return (allLID);
+            }
+        }
+
+        /**
+         * Gets the Pre-req of the given Lesson. Returns -1 if the Pre-req is Null
+         * */
+        public int getPreReq(int LID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT preReq FROM Lesson " +
+                "WHERE LID = @LID");
+                cmd.Parameters.AddWithValue("@LID", LID);
+
+                cmd.Connection = db;
+                Object count = cmd.ExecuteScalar();
+
+                int preReq = (count.Equals(DBNull.Value)) ? -1 : (Int32)count;
+
+                return (preReq);
+            }
+        }
+
+        /**
+         * Gets whether the username and the LID have their pre-req complete
+         * */
+        public Boolean getPreReqComplete(int LID, String username) {
+            int LIDofPreReq = getPreReq(LID);
+            if (LIDofPreReq == -1) {
+                return true;
+            }
+
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT isComplete FROM UserLesson " +
+                "WHERE username = @username " +
+                "AND LID = @LID");
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@LID", LIDofPreReq);
+
+                cmd.Connection = db;
+                Boolean isComplete = (Boolean)cmd.ExecuteScalar();
+
+                return (isComplete);
+            }
+        }
+
+        /**
+         * Gets all of the Lessons that are not completed but who's pre-req is 
+         * complete from the user
+         * @param       username            The user to get the lessons for
+         * @return      List<int>           All the LID's that are 
+         * */
+        public List<int> getAllUnlockedNotCompleteLessons(String username) {
+            List<int> allNonCompleteLessons = getAllNotCompleteLessons(username);
+            List<int> allUnlockedNotCompleteLessons = new List<int>();
+            foreach(int lesson in allNonCompleteLessons) {
+                if (getPreReqComplete(lesson, username)) {
+                    allUnlockedNotCompleteLessons.Add(lesson);
+                }
+            }
+            return allUnlockedNotCompleteLessons;
+        }
+
+        /**
+         * Gets the amount of user's that have completed the given problem
+         * and answered it correctly
+         * */
+        public int getAllHistoryIsCorrect(int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM History " +
+                    "WHERE PID = @PID AND " +
+                    "isCorrect = @true");
+                cmd.Parameters.AddWithValue("@PID", PID);
+                cmd.Parameters.AddWithValue("@true", true);
+                cmd.Connection = db;
+                Int32 count = (Int32)cmd.ExecuteScalar();
+
+                return (count);
+            }
+        }
+
+        /**
+         * Gets the sum of all User Ratings of a given problem given that the
+         * history was correct
+         * */
+        public int getSumOfHistoryUserRating(int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT SUM(userRating) FROM History " +
+                    "WHERE PID = @PID AND " +
+                    "isCorrect = @true");
+                cmd.Parameters.AddWithValue("@PID", PID);
+                cmd.Parameters.AddWithValue("@true", true);
+                cmd.Connection = db;
+                Int32 sum = (Int32)cmd.ExecuteScalar();
+
+                return (sum);
+            }
+        }
+
+        /**
+         * Updates the User Rating of the given problem by looking at 
+         * what user's that got it right stated
+         * */
+        public Boolean updateProblemUserRating(int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                float sumOfRatings = getSumOfHistoryUserRating(PID);
+                float numOfRatings = getAllHistoryIsCorrect(PID);
+                int newUserRating = (int)Math.Round(sumOfRatings / numOfRatings);
+
+                SqlCommand cmd = new SqlCommand("UPDATE userRating = @newUserRating " +
+                    "FROM Problem " +
+                    "WHERE PID = @PID");
+                cmd.Parameters.AddWithValue("@PID", PID);
+                cmd.Connection = db;
+                cmd.ExecuteNonQuery();
+                //Int32 sum = (Int32)cmd.ExecuteScalar();
+
+                return (true);
             }
         }
     }
