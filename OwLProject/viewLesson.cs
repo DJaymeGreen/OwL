@@ -17,17 +17,21 @@ namespace OwLProject {
         List<Control> chartComponents;
         List<Control> dropdownComponents;
         List<int> allPID;
+        int LID;
         int currentShownProblemIndex;
         int currentShownImageIndex;
         database db;
         String username;
         mainMenuUser userMM = null;
+        int diffComplete = 0;
+        Dictionary<int, int> problemClusters;
+        int numberOfProblemClusters;
 
         public viewLesson(String lessonTitle, String username) {
             db = new database();
             InitializeComponent();
             this.username = username;
-            int LID = db.getLidFromTitle(lessonTitle);
+            this.LID = db.getLidFromTitle(lessonTitle);
             allPID = db.getAllProblemPID(LID);
             //Generate all of the right shown stuff
             viewLessonTitleLabel.Text = lessonTitle;
@@ -51,6 +55,29 @@ namespace OwLProject {
                 viewLessonMediaDescription.Text = mediaInLesson[currentShownImageIndex].Description;
             }
 
+            //Establish the problem cluster stuff
+            List<List<int>> PIDTypeDifficultyList = db.getPIDTypeDifficultyList();
+            List<int> PIDInLesson = new List<int>();
+            List<List<int>> typeDifficultyList = new List<List<int>>();
+            int index = 0;
+            foreach(List<int> item in PIDTypeDifficultyList) {
+                PIDInLesson.Add(item[0]);
+                typeDifficultyList.Add(new List<int>());
+                typeDifficultyList[index].Add(item[1]);
+                typeDifficultyList[index].Add(item[2]);
+                index++;
+            }
+            KMeans kMeansAlgo = new KMeans(typeDifficultyList, PIDInLesson);
+            problemClusters = kMeansAlgo.getProblemClusters();
+
+            List<int> seenClusters = new List<int>();
+            foreach(int prob in problemClusters.Keys) {
+                if (!seenClusters.Contains(problemClusters[prob])) {
+                    seenClusters.Add(problemClusters[prob]);
+                    numberOfProblemClusters++;
+                }
+            }
+
             //Establish the connection between the Components and the Lists
 
             //Deal with showing the problem...
@@ -58,7 +85,7 @@ namespace OwLProject {
             establishAllComponentLists();
             viewLessonFeedbackLabel.Hide();
             viewLessonFeedback.Hide();
-            showNextProblem();
+            showNextProblem(true);
             //InitializeComponent();
         }
 
@@ -158,16 +185,112 @@ namespace OwLProject {
         }
 
         /**
+         * Ranks all of the PID's in this lesson based on likliness that this
+         * user's prior questions answered
+         * */
+        private List<int> rankPIDsBasedOnProblemClusterRating() {
+            Dictionary<int, float> clusterRating = new Dictionary<int, float>();
+            Dictionary<int, int> numberOfProblemsTakenInCluster = new Dictionary<int, int>();
+
+            for (int clust = 0; clust < numberOfProblemClusters; ++clust) {
+                clusterRating[clust] = 0;
+                numberOfProblemsTakenInCluster[clust] = 0;
+            }
+
+            //Get how much I like a problem cluster
+            List<int> allPIDsTaken = db.getAllPIDThatUserCompleted(username);
+            foreach (int PID in allPIDsTaken) {
+                int cluster = problemClusters[PID];
+                numberOfProblemsTakenInCluster[cluster] += 1;
+                clusterRating[cluster] += db.getUserRatingByUser(username, PID);
+            }
+
+            foreach(int cluster in numberOfProblemsTakenInCluster.Keys) {
+                if(numberOfProblemsTakenInCluster[cluster] > 0) {
+                    clusterRating[cluster] = (clusterRating[cluster] / numberOfProblemsTakenInCluster[cluster]);
+                }
+                else {
+                    clusterRating[cluster] = (float)2.5;
+                }
+            }
+
+            //Sort cluster likeness in a list, Favorite to Least Favorite...
+            List<int> rankedProblemClusters = new List<int>();
+            while (clusterRating.Keys.Count > 0) {
+                int favCluster = 0;
+                float favClusterRating = 0;
+                foreach (int clust in clusterRating.Keys) {
+                    if(clusterRating[clust] > favClusterRating) {
+                        favClusterRating = clusterRating[clust];
+                        favCluster = clust;
+                    }
+                }
+                rankedProblemClusters.Add(favCluster);
+                clusterRating.Remove(favCluster);
+            }
+
+            //Given all problems I have not taken in Lesson, sort them with highest
+            //rated cluster and highest average user rating
+            List<int> potentialPID = db.getAllProblemPID(LID);
+            List<int> completedProblems = db.getAllPIDThatUserCompletedInLesson(username, LID);
+            foreach(int prob in completedProblems) {
+                if (potentialPID.Contains(prob)) {
+                    potentialPID.Remove(prob);
+                }
+            }
+            List<int> rankedPID = new List<int>();
+            //Selection sort, but idc to optimize currently. Should be good because really smalle
+            for (int clust = 0; clust < rankedProblemClusters.Count; ++clust) {
+                while (true) { // I am still searching for the cluster I was looking for
+                    int favProblem = -1;
+                    float bestAvgUserRating = -1;
+                    foreach(int potentialProb in potentialPID) {
+                        if (problemClusters[potentialProb] == rankedProblemClusters[clust]) {
+                            if (db.getOverallUserRating(potentialProb) > bestAvgUserRating) {
+                                favProblem = potentialProb;
+                                bestAvgUserRating = db.getOverallUserRating(potentialProb);
+                            }
+                        }
+                    }
+                    if(favProblem != -1) {
+                        rankedPID.Add(favProblem);
+                        potentialPID.Remove(favProblem);
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+            return rankedPID;
+        }
+
+        /**
          * Shows the next problem in the problem list. Change the appearence of the page
          * based on the type field in the Problem
          * */
-        private void showNextProblem() {
+        private void showNextProblem(Boolean previouslyCorrect) {
             //Hide prior feedback
             viewLessonFeedback.Hide();
             viewLessonFeedbackLabel.Hide();
 
             //Go to next problem
-            currentShownProblemIndex += 1;
+            //currentShownProblemIndex += 1;
+            //Random rnd = new Random();
+            //currentShownProblemIndex = rnd.Next(0, allPID.Count);
+
+            if (previouslyCorrect) {
+                List<int> rankedPIDOnProblem = rankPIDsBasedOnProblemClusterRating();
+
+                //For testing RankedPIDOnProblem...
+                allPID = rankedPIDOnProblem;
+                currentShownProblemIndex = 0;
+            }
+            else {
+                currentShownProblemIndex += 1;
+            }
+            
+
+
             if(currentShownProblemIndex >= allPID.Count) {
                 currentShownProblemIndex = 0;
             }
@@ -284,7 +407,7 @@ namespace OwLProject {
          * When Skip Question is pressed
          * */
         private void viewLessonSkipQuestionButton_Click(object sender, EventArgs e) {
-            showNextProblem();
+            showNextProblem(false);
         }
 
         /**
@@ -424,7 +547,9 @@ namespace OwLProject {
             else {
                 Boolean isCorrect = isUserCorrect();
                 if (isCorrect) {
-                    MessageBox.Show("The question was correct!!");
+                    diffComplete += db.getProblemDifficulty(allPID[currentShownProblemIndex]);
+                    MessageBox.Show("The question was correct!! You have: " + diffComplete.ToString() + " points. You at least 15 points to pass the lesson");
+                    
                     //showNextProblem();
                 }
                 else {
@@ -436,14 +561,15 @@ namespace OwLProject {
                 int userRating = (int)viewLessonYourRating.Value;
                 foreach(String answer in userAnswer) {
                     int newHID = db.getHistoryCount();
-                    db.addToUserHistory(newHID, username);
                     db.addToHistory(newHID, answer, allPID[currentShownProblemIndex], db.getLIDFromPID(allPID[currentShownProblemIndex]), isCorrect, userRating);
+                    db.addToUserHistory(newHID, username);
                 }
                 if (isCorrect) {
                     db.updateProblemUserRating(allPID[currentShownProblemIndex]);
                 }
                 //If correct, check if done with lesson or go to next problem
-                if (db.getNumberofQuestionsCorrectForLesson(db.getLIDFromPID(allPID[currentShownProblemIndex]),username) > 5) {
+                //if (db.getNumberofQuestionsCorrectForLesson(db.getLIDFromPID(allPID[currentShownProblemIndex]),username) >= 3) {
+                if(diffComplete >= 15) { 
                     db.updateUserCompleteLesson(db.getLIDFromPID(allPID[currentShownProblemIndex]), username);
                     MessageBox.Show("Congratulations! You finished this lesson. You may advance to other lessons.");
                     if(userMM != null) {
@@ -453,7 +579,10 @@ namespace OwLProject {
                 }
                 else {
                     //currentShownProblemIndex = -1;
-                    showNextProblem();
+                    if (isCorrect) {
+                        showNextProblem(true);
+                    }
+                    
                 }
             }
             

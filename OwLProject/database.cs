@@ -755,7 +755,7 @@ namespace OwLProject {
 
                 //Need a table join...
                 SqlCommand cmd = new SqlCommand("SELECT COUNT(DISTINCT h.PID) FROM " + 
-                    "History AS h, UserHistory as uh, User as u " +
+                    "History AS h, UserHistory as uh, allUsers as u " +
                     "WHERE h.HID = uh.HID AND " +
                     "uh.username = @username AND " +
                     "h.LID = @LID AND " +
@@ -893,10 +893,10 @@ namespace OwLProject {
                 db.Open();
 
                 SqlCommand cmd = new SqlCommand("SELECT LID FROM UserLesson " +
-                    "WHERE username = @username AND " +
-                    "isComplete = @false");
+                    "WHERE username = @username");
+                    //"isComplete = @false");
                 cmd.Parameters.AddWithValue("@username", username);
-                cmd.Parameters.AddWithValue("@false", false);
+                //cmd.Parameters.AddWithValue("@false", false);
 
                 cmd.Connection = db;
                 SqlDataReader dr = cmd.ExecuteReader();
@@ -1024,15 +1024,198 @@ namespace OwLProject {
                 float numOfRatings = getAllHistoryIsCorrect(PID);
                 int newUserRating = (int)Math.Round(sumOfRatings / numOfRatings);
 
-                SqlCommand cmd = new SqlCommand("UPDATE userRating = @newUserRating " +
-                    "FROM Problem " +
+                SqlCommand cmd = new SqlCommand("UPDATE Problem SET userRating = @newUserRating " +
                     "WHERE PID = @PID");
                 cmd.Parameters.AddWithValue("@PID", PID);
+                cmd.Parameters.AddWithValue("@newUserRating", newUserRating);
                 cmd.Connection = db;
                 cmd.ExecuteNonQuery();
                 //Int32 sum = (Int32)cmd.ExecuteScalar();
 
                 return (true);
+            }
+        }
+
+        /**
+         * Gets the Overall User Rating of the Given Problem
+         * */
+        public int getOverallUserRating(int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT userRating FROM " +
+                    "Problem " +
+                    "WHERE PID = @PID");
+                //"isComplete = @false");
+                cmd.Parameters.AddWithValue("@PID", PID);
+
+                cmd.Connection = db;
+                Int32 userRating = (Int32)(cmd.ExecuteScalar() ?? -1);
+
+                return (userRating);
+            }
+        }
+
+        /**
+         * Gets the Rating that the user gave this completed, problem
+         * Returns -1 if the user never completed this problem
+         * */
+        public int getUserRatingByUser(String username, int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT h.userRating FROM " +
+                    "History AS h, UserHistory as uh " +
+                    "WHERE uh.username = @username AND " +
+                    "uh.HID = h.HID AND " +
+                    "h.isCorrect = @true AND " +
+                    "h.PID = @PID");
+                //"isComplete = @false");
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@true", true);
+                cmd.Parameters.AddWithValue("@PID", PID);
+
+                cmd.Connection = db;
+                Int32 userRating = (Int32)(cmd.ExecuteScalar() ?? -1);
+
+                return (userRating);
+            }
+        }
+
+        /**
+         * Gets all the problems that a user has not completed in the Lesson
+         * */
+        public List<int> getAllPIDUserHasNotCompleted(String username, int LID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT lp.PID FROM " +
+                    "History AS h, UserHistory as uh, LessonProblem as lp " +
+                    "WHERE uh.username = @username AND " +
+                    "uh.HID = h.HID AND " +
+                    "NOT h.isCorrect = @true AND " +
+                    "lp.LID = @LID AND " +
+                    "lp.PID = h.PID");
+                //"isComplete = @false");
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@true", true);
+                cmd.Parameters.AddWithValue("@LID", LID);
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+                List<int> allPIDUserCompleted = new List<int>();
+                if (dr.HasRows) {
+                    while (dr.Read()) {
+                        allPIDUserCompleted.Add((int)dr[0]);
+                    }
+                }
+                return (allPIDUserCompleted);
+            }
+        }
+
+        /**
+         * Gets all the PID that the User Completed In a Lesson
+         * */
+        public List<int> getAllPIDThatUserCompletedInLesson(String username, int LID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT DISTINCT(h.PID) FROM " +
+                    "History AS h, UserHistory as uh " +
+                    "WHERE uh.username = @username AND " +
+                    "uh.HID = h.HID AND " +
+                    "h.isCorrect = @true AND " +
+                    "h.LID = @LID");
+                //"isComplete = @false");
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@true", true);
+                cmd.Parameters.AddWithValue("@LID", LID);
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+                List<int> allPIDUserCompleted = new List<int>();
+                if (dr.HasRows) {
+                    while (dr.Read()) {
+                        allPIDUserCompleted.Add((int)dr[0]);
+                    }
+                }
+                return (allPIDUserCompleted);
+            }
+        }
+
+        /**
+         * Gets all the PID that the User Completed
+         * */
+        public List<int> getAllPIDThatUserCompleted(String username) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT DISTINCT(h.PID) FROM " +
+                    "History AS h, UserHistory as uh " +
+                    "WHERE uh.username = @username AND "+
+                    "uh.HID = h.HID AND " +
+                    "h.isCorrect = @true");
+                //"isComplete = @false");
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@true", true);
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+                List<int> allPIDUserCompleted = new List<int>();
+                if (dr.HasRows) {
+                    while (dr.Read()) {
+                        allPIDUserCompleted.Add((int)dr[0]);
+                    }
+                }
+                return (allPIDUserCompleted);
+            }
+        }
+
+        /**
+         * Gets the PID,Type,and Difficulty of all Problems in a Lesson
+         * */
+        public List<List<int>> getPIDTypeDifficultyList() {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                //Need a table join...
+                SqlCommand cmd = new SqlCommand("SELECT p.PID, p.type, p.difficulty FROM " +
+                    "Problem AS p, LessonProblem as lp " +
+                    "WHERE p.PID = lp.PID");
+                //cmd.Parameters.AddWithValue("@LID", LID);
+
+                cmd.Connection = db;
+                //SqlDataReader dr = cmd.ExecuteReader();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                
+                List<List<int>> PIDTypeDifficulty = new List<List<int>>();
+                for (int index = 0; index < ds.Tables[0].Rows.Count; ++index) {
+                    PIDTypeDifficulty.Add(new List<int>());
+                    PIDTypeDifficulty[index].Add((int)ds.Tables[0].Rows[index][0]);
+                    PIDTypeDifficulty[index].Add((int)ds.Tables[0].Rows[index][1]);
+                    PIDTypeDifficulty[index].Add((int)ds.Tables[0].Rows[index][2]);
+                }
+                /*
+                int index = -1;
+                int indexOfCol = 0;
+                if (dr.HasRows) {
+                    while (dr.Read()) {
+                        if(indexOfCol % 3 == 0) {
+                            PIDTypeDifficulty.Add(new List<int>());
+                            index++;
+                        }
+                        PIDTypeDifficulty[index].Add((int)dr[indexOfCol]);
+                        indexOfCol++;
+                        //PIDTypeDifficulty[index].Add((int)dr[1]);
+                        //PIDTypeDifficulty[index].Add((int)dr[2]);
+
+                    }
+                    index++;
+                }
+                */
+                return (PIDTypeDifficulty);
             }
         }
     }

@@ -85,14 +85,14 @@
             this.viewLessonContent.Name = "viewLessonContent";
             this.viewLessonContent.ReadOnly = true;
             this.viewLessonContent.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.viewLessonContent.Size = new System.Drawing.Size(300, 581);
+            this.viewLessonContent.Size = new System.Drawing.Size(300, 668);
             this.viewLessonContent.TabIndex = 1;
             // 
             // viewLessonImageTitleLable
             // 
             this.viewLessonImageTitleLable.AutoSize = true;
             this.viewLessonImageTitleLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonImageTitleLable.Location = new System.Drawing.Point(369, 84);
+            this.viewLessonImageTitleLable.Location = new System.Drawing.Point(345, 62);
             this.viewLessonImageTitleLable.Name = "viewLessonImageTitleLable";
             this.viewLessonImageTitleLable.Size = new System.Drawing.Size(87, 20);
             this.viewLessonImageTitleLable.TabIndex = 2;
@@ -102,25 +102,25 @@
             // 
             this.viewLessonMedia.Location = new System.Drawing.Point(349, 121);
             this.viewLessonMedia.Name = "viewLessonMedia";
-            this.viewLessonMedia.Size = new System.Drawing.Size(261, 223);
+            this.viewLessonMedia.Size = new System.Drawing.Size(424, 364);
             this.viewLessonMedia.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.viewLessonMedia.TabIndex = 3;
             this.viewLessonMedia.TabStop = false;
             // 
             // viewLessonMediaDescription
             // 
-            this.viewLessonMediaDescription.Location = new System.Drawing.Point(349, 363);
+            this.viewLessonMediaDescription.Location = new System.Drawing.Point(373, 514);
             this.viewLessonMediaDescription.Multiline = true;
             this.viewLessonMediaDescription.Name = "viewLessonMediaDescription";
             this.viewLessonMediaDescription.ReadOnly = true;
             this.viewLessonMediaDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.viewLessonMediaDescription.Size = new System.Drawing.Size(261, 107);
+            this.viewLessonMediaDescription.Size = new System.Drawing.Size(316, 108);
             this.viewLessonMediaDescription.TabIndex = 4;
             // 
             // viewLessonNextMedia
             // 
             this.viewLessonNextMedia.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonNextMedia.Location = new System.Drawing.Point(484, 517);
+            this.viewLessonNextMedia.Location = new System.Drawing.Point(521, 657);
             this.viewLessonNextMedia.Name = "viewLessonNextMedia";
             this.viewLessonNextMedia.Size = new System.Drawing.Size(75, 33);
             this.viewLessonNextMedia.TabIndex = 5;
@@ -131,7 +131,7 @@
             // viewLessonPreviousMedia
             // 
             this.viewLessonPreviousMedia.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonPreviousMedia.Location = new System.Drawing.Point(373, 517);
+            this.viewLessonPreviousMedia.Location = new System.Drawing.Point(410, 657);
             this.viewLessonPreviousMedia.Name = "viewLessonPreviousMedia";
             this.viewLessonPreviousMedia.Size = new System.Drawing.Size(89, 33);
             this.viewLessonPreviousMedia.TabIndex = 6;
@@ -143,7 +143,7 @@
             // 
             this.viewLessonQuestionTitle.AutoSize = true;
             this.viewLessonQuestionTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonQuestionTitle.Location = new System.Drawing.Point(645, 24);
+            this.viewLessonQuestionTitle.Location = new System.Drawing.Point(792, 51);
             this.viewLessonQuestionTitle.Name = "viewLessonQuestionTitle";
             this.viewLessonQuestionTitle.Size = new System.Drawing.Size(184, 20);
             this.viewLessonQuestionTitle.TabIndex = 7;
@@ -153,7 +153,7 @@
             // 
             this.viewLessonQuestionLabel.AutoSize = true;
             this.viewLessonQuestionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonQuestionLabel.Location = new System.Drawing.Point(645, 71);
+            this.viewLessonQuestionLabel.Location = new System.Drawing.Point(792, 98);
             this.viewLessonQuestionLabel.MaximumSize = new System.Drawing.Size(550, 50);
             this.viewLessonQuestionLabel.Name = "viewLessonQuestionLabel";
             this.viewLessonQuestionLabel.Size = new System.Drawing.Size(51, 20);
@@ -164,7 +164,7 @@
             // 
             this.button1.AutoSize = true;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(911, 598);
+            this.button1.Location = new System.Drawing.Point(1065, 685);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 30);
             this.button1.TabIndex = 9;
@@ -176,7 +176,7 @@
             // 
             this.viewLessonMCContent1.AutoSize = true;
             this.viewLessonMCContent1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonMCContent1.Location = new System.Drawing.Point(652, 182);
+            this.viewLessonMCContent1.Location = new System.Drawing.Point(799, 209);
             this.viewLessonMCContent1.MaximumSize = new System.Drawing.Size(450, 20);
             this.viewLessonMCContent1.Name = "viewLessonMCContent1";
             this.viewLessonMCContent1.Size = new System.Drawing.Size(51, 20);
@@ -188,7 +188,7 @@
             // 
             this.viewLessonMCContent2.AutoSize = true;
             this.viewLessonMCContent2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonMCContent2.Location = new System.Drawing.Point(652, 232);
+            this.viewLessonMCContent2.Location = new System.Drawing.Point(799, 259);
             this.viewLessonMCContent2.MaximumSize = new System.Drawing.Size(450, 20);
             this.viewLessonMCContent2.Name = "viewLessonMCContent2";
             this.viewLessonMCContent2.Size = new System.Drawing.Size(51, 20);
@@ -200,7 +200,7 @@
             // 
             this.viewLessonMCContent3.AutoSize = true;
             this.viewLessonMCContent3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonMCContent3.Location = new System.Drawing.Point(652, 283);
+            this.viewLessonMCContent3.Location = new System.Drawing.Point(799, 310);
             this.viewLessonMCContent3.MaximumSize = new System.Drawing.Size(450, 20);
             this.viewLessonMCContent3.Name = "viewLessonMCContent3";
             this.viewLessonMCContent3.Size = new System.Drawing.Size(51, 20);
@@ -212,7 +212,7 @@
             // 
             this.viewLessonMCContent4.AutoSize = true;
             this.viewLessonMCContent4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonMCContent4.Location = new System.Drawing.Point(652, 339);
+            this.viewLessonMCContent4.Location = new System.Drawing.Point(799, 366);
             this.viewLessonMCContent4.MaximumSize = new System.Drawing.Size(450, 20);
             this.viewLessonMCContent4.Name = "viewLessonMCContent4";
             this.viewLessonMCContent4.Size = new System.Drawing.Size(51, 20);
@@ -224,7 +224,7 @@
             // 
             this.viewLessonMCContent5.AutoSize = true;
             this.viewLessonMCContent5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonMCContent5.Location = new System.Drawing.Point(652, 388);
+            this.viewLessonMCContent5.Location = new System.Drawing.Point(799, 415);
             this.viewLessonMCContent5.MaximumSize = new System.Drawing.Size(450, 20);
             this.viewLessonMCContent5.Name = "viewLessonMCContent5";
             this.viewLessonMCContent5.Size = new System.Drawing.Size(51, 20);
@@ -236,7 +236,7 @@
             // 
             this.viewLessonMCContent6.AutoSize = true;
             this.viewLessonMCContent6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonMCContent6.Location = new System.Drawing.Point(652, 440);
+            this.viewLessonMCContent6.Location = new System.Drawing.Point(799, 467);
             this.viewLessonMCContent6.MaximumSize = new System.Drawing.Size(450, 20);
             this.viewLessonMCContent6.Name = "viewLessonMCContent6";
             this.viewLessonMCContent6.Size = new System.Drawing.Size(51, 20);
@@ -248,7 +248,7 @@
             // 
             this.viewLessonMCCB1.AutoSize = true;
             this.viewLessonMCCB1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonMCCB1.Location = new System.Drawing.Point(1190, 186);
+            this.viewLessonMCCB1.Location = new System.Drawing.Point(1337, 213);
             this.viewLessonMCCB1.Name = "viewLessonMCCB1";
             this.viewLessonMCCB1.Size = new System.Drawing.Size(15, 14);
             this.viewLessonMCCB1.TabIndex = 16;
@@ -259,7 +259,7 @@
             // 
             this.viewLessonMCCB2.AutoSize = true;
             this.viewLessonMCCB2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonMCCB2.Location = new System.Drawing.Point(1190, 232);
+            this.viewLessonMCCB2.Location = new System.Drawing.Point(1337, 259);
             this.viewLessonMCCB2.Name = "viewLessonMCCB2";
             this.viewLessonMCCB2.Size = new System.Drawing.Size(15, 14);
             this.viewLessonMCCB2.TabIndex = 17;
@@ -270,7 +270,7 @@
             // 
             this.viewLessonMCCB3.AutoSize = true;
             this.viewLessonMCCB3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonMCCB3.Location = new System.Drawing.Point(1190, 287);
+            this.viewLessonMCCB3.Location = new System.Drawing.Point(1337, 314);
             this.viewLessonMCCB3.Name = "viewLessonMCCB3";
             this.viewLessonMCCB3.Size = new System.Drawing.Size(15, 14);
             this.viewLessonMCCB3.TabIndex = 18;
@@ -281,7 +281,7 @@
             // 
             this.viewLessonMCCB4.AutoSize = true;
             this.viewLessonMCCB4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonMCCB4.Location = new System.Drawing.Point(1190, 343);
+            this.viewLessonMCCB4.Location = new System.Drawing.Point(1337, 370);
             this.viewLessonMCCB4.Name = "viewLessonMCCB4";
             this.viewLessonMCCB4.Size = new System.Drawing.Size(15, 14);
             this.viewLessonMCCB4.TabIndex = 19;
@@ -292,7 +292,7 @@
             // 
             this.viewLessonMCCB5.AutoSize = true;
             this.viewLessonMCCB5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonMCCB5.Location = new System.Drawing.Point(1190, 394);
+            this.viewLessonMCCB5.Location = new System.Drawing.Point(1337, 421);
             this.viewLessonMCCB5.Name = "viewLessonMCCB5";
             this.viewLessonMCCB5.Size = new System.Drawing.Size(15, 14);
             this.viewLessonMCCB5.TabIndex = 20;
@@ -303,7 +303,7 @@
             // 
             this.viewLessonMCCB6.AutoSize = true;
             this.viewLessonMCCB6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonMCCB6.Location = new System.Drawing.Point(1190, 444);
+            this.viewLessonMCCB6.Location = new System.Drawing.Point(1337, 471);
             this.viewLessonMCCB6.Name = "viewLessonMCCB6";
             this.viewLessonMCCB6.Size = new System.Drawing.Size(15, 14);
             this.viewLessonMCCB6.TabIndex = 21;
@@ -323,7 +323,7 @@
             this.Column7,
             this.Column8});
             this.viewLessonChart.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
-            this.viewLessonChart.Location = new System.Drawing.Point(649, 183);
+            this.viewLessonChart.Location = new System.Drawing.Point(796, 210);
             this.viewLessonChart.Name = "viewLessonChart";
             this.viewLessonChart.Size = new System.Drawing.Size(569, 238);
             this.viewLessonChart.TabIndex = 22;
@@ -373,7 +373,7 @@
             // 
             this.viewLessonChartResetToGivenButton.AutoSize = true;
             this.viewLessonChartResetToGivenButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonChartResetToGivenButton.Location = new System.Drawing.Point(963, 440);
+            this.viewLessonChartResetToGivenButton.Location = new System.Drawing.Point(1110, 467);
             this.viewLessonChartResetToGivenButton.Name = "viewLessonChartResetToGivenButton";
             this.viewLessonChartResetToGivenButton.Size = new System.Drawing.Size(129, 30);
             this.viewLessonChartResetToGivenButton.TabIndex = 23;
@@ -386,7 +386,7 @@
             // 
             this.viewLessonDropdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.viewLessonDropdown.FormattingEnabled = true;
-            this.viewLessonDropdown.Location = new System.Drawing.Point(656, 255);
+            this.viewLessonDropdown.Location = new System.Drawing.Point(803, 282);
             this.viewLessonDropdown.Name = "viewLessonDropdown";
             this.viewLessonDropdown.Size = new System.Drawing.Size(259, 28);
             this.viewLessonDropdown.TabIndex = 24;
@@ -396,7 +396,7 @@
             // 
             this.viewLessonFeedbackLabel.AutoSize = true;
             this.viewLessonFeedbackLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonFeedbackLabel.Location = new System.Drawing.Point(649, 517);
+            this.viewLessonFeedbackLabel.Location = new System.Drawing.Point(796, 544);
             this.viewLessonFeedbackLabel.Name = "viewLessonFeedbackLabel";
             this.viewLessonFeedbackLabel.Size = new System.Drawing.Size(84, 20);
             this.viewLessonFeedbackLabel.TabIndex = 25;
@@ -406,7 +406,7 @@
             // 
             this.viewLessonFeedback.AutoSize = true;
             this.viewLessonFeedback.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonFeedback.Location = new System.Drawing.Point(765, 517);
+            this.viewLessonFeedback.Location = new System.Drawing.Point(912, 544);
             this.viewLessonFeedback.Name = "viewLessonFeedback";
             this.viewLessonFeedback.Size = new System.Drawing.Size(51, 20);
             this.viewLessonFeedback.TabIndex = 26;
@@ -416,7 +416,7 @@
             // 
             this.viewLessonSkipQuestionButton.AutoSize = true;
             this.viewLessonSkipQuestionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonSkipQuestionButton.Location = new System.Drawing.Point(1140, 598);
+            this.viewLessonSkipQuestionButton.Location = new System.Drawing.Point(1294, 685);
             this.viewLessonSkipQuestionButton.Name = "viewLessonSkipQuestionButton";
             this.viewLessonSkipQuestionButton.Size = new System.Drawing.Size(118, 30);
             this.viewLessonSkipQuestionButton.TabIndex = 27;
@@ -428,7 +428,7 @@
             // 
             this.viewLessonYourRatingLabel.AutoSize = true;
             this.viewLessonYourRatingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonYourRatingLabel.Location = new System.Drawing.Point(645, 570);
+            this.viewLessonYourRatingLabel.Location = new System.Drawing.Point(799, 657);
             this.viewLessonYourRatingLabel.Name = "viewLessonYourRatingLabel";
             this.viewLessonYourRatingLabel.Size = new System.Drawing.Size(98, 20);
             this.viewLessonYourRatingLabel.TabIndex = 28;
@@ -437,7 +437,7 @@
             // viewLessonYourRating
             // 
             this.viewLessonYourRating.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewLessonYourRating.Location = new System.Drawing.Point(649, 601);
+            this.viewLessonYourRating.Location = new System.Drawing.Point(803, 688);
             this.viewLessonYourRating.Maximum = new decimal(new int[] {
             5,
             0,
@@ -451,7 +451,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1270, 640);
+            this.ClientSize = new System.Drawing.Size(1441, 754);
             this.Controls.Add(this.viewLessonYourRating);
             this.Controls.Add(this.viewLessonYourRatingLabel);
             this.Controls.Add(this.viewLessonSkipQuestionButton);
