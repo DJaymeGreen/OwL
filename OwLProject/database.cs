@@ -1037,6 +1037,56 @@ namespace OwLProject {
         }
 
         /**
+         * Gets the number of attempts a user has done on a problem
+         * */
+        public int getNumberOfAttempts(String user,int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(DISTINCT(h.HID)) FROM " +
+                    "History AS h, UserHistory as uh " +
+                    "WHERE h.PID = @PID AND " +
+                    "uh.HID = h.HID AND " +
+                    "uh.username = @username");
+                cmd.Parameters.AddWithValue("@username", user);
+                cmd.Parameters.AddWithValue("@PID", PID);
+
+                cmd.Connection = db;
+                Int32 numAttempts = (Int32)(cmd.ExecuteScalar() ?? -1);
+
+                return (numAttempts);
+            }
+        }
+
+        /**
+         * Gets and returns all the User's that Completed that Problem
+         * */
+        public List<String> getAllUsersThatCompletedProblem(int PID) {
+            using (SqlConnection db = new SqlConnection(connectionString)) {
+                db.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT DISTINCT(uh.username) FROM " +
+                    "History AS h, UserHistory as uh " +
+                    "WHERE h.PID = @PID AND " +
+                    "uh.HID = h.HID AND " +
+                    "h.isCorrect = @true");
+                //"isComplete = @false");
+                cmd.Parameters.AddWithValue("@true", true);
+                cmd.Parameters.AddWithValue("@PID", PID);
+
+                cmd.Connection = db;
+                SqlDataReader dr = cmd.ExecuteReader();
+                List<String> allUsersThatCompletedProblem = new List<String>();
+                if (dr.HasRows) {
+                    while (dr.Read()) {
+                        allUsersThatCompletedProblem.Add(dr[0].ToString());
+                    }
+                }
+                return (allUsersThatCompletedProblem);
+            }
+        }
+
+        /**
          * Gets the Overall User Rating of the Given Problem
          * */
         public int getOverallUserRating(int PID) {

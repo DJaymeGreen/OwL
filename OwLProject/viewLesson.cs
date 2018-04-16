@@ -26,6 +26,7 @@ namespace OwLProject {
         int diffComplete = 0;
         Dictionary<int, int> problemClusters;
         int numberOfProblemClusters;
+        kNNWithUsers problemDecisionWithUsers;
 
         public viewLesson(String lessonTitle, String username) {
             db = new database();
@@ -67,6 +68,7 @@ namespace OwLProject {
                 typeDifficultyList[index].Add(item[2]);
                 index++;
             }
+            this.problemDecisionWithUsers = new kNNWithUsers(username, LID);
             KMeans kMeansAlgo = new KMeans(typeDifficultyList, PIDInLesson);
             problemClusters = kMeansAlgo.getProblemClusters();
 
@@ -76,6 +78,9 @@ namespace OwLProject {
                     seenClusters.Add(problemClusters[prob]);
                     numberOfProblemClusters++;
                 }
+            }
+            while(numberOfProblemClusters <= seenClusters.Max()) {
+                numberOfProblemClusters++;
             }
 
             //Establish the connection between the Components and the Lists
@@ -265,6 +270,16 @@ namespace OwLProject {
         }
 
         /**
+         * Combines both the byProblem and byUser rankings into a single rank
+         * */
+        private List<int> combineBothRankPIDs(List<int> byProblem, List<int> byUser) {
+            Dictionary<int, int> rating = new Dictionary<int, int>();
+            for(int index = 0; index < byProblem.Count; ++index) {
+
+            }
+        }
+
+        /**
          * Shows the next problem in the problem list. Change the appearence of the page
          * based on the type field in the Problem
          * */
@@ -275,14 +290,20 @@ namespace OwLProject {
 
             //Go to next problem
             //currentShownProblemIndex += 1;
-            //Random rnd = new Random();
-            //currentShownProblemIndex = rnd.Next(0, allPID.Count);
 
-            if (previouslyCorrect) {
+            if(db.getAllPIDThatUserCompletedInLesson(username,LID).Count < 1 || db.getAllPIDThatUserCompleted(username).Count < 3) {
+                Random rnd = new Random();
+                currentShownProblemIndex = rnd.Next(0, allPID.Count);
+            }
+            else if (previouslyCorrect) {
                 List<int> rankedPIDOnProblem = rankPIDsBasedOnProblemClusterRating();
+                List<int> rankedPIDOnUser = problemDecisionWithUsers.findBestProblemsBasedOnUsers();
+
+                //Combine two lists based on Problem and Users
+
 
                 //For testing RankedPIDOnProblem...
-                allPID = rankedPIDOnProblem;
+                allPID = rankedPIDOnUser;
                 currentShownProblemIndex = 0;
             }
             else {
